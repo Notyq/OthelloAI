@@ -236,6 +236,20 @@ class Othello(object):
         return move_list
 
     def gameOver(self):
+
+        # === GAME OVER ===
+
+        # No legal moves, game ends
+        self.legal_moves = self.getMoves()
+        print(self.legal_moves)
+        if self.legal_moves is None:
+            return True
+
+        # All positions filled - the game is over
+        if len(self.disks) == 64:
+            return True
+
+        # ===           ===
         return False
 
 
@@ -440,7 +454,10 @@ def run():
 
             if world.othello.started and not world.othello.gameOver():
                 time_passed_seconds = time_passed / 1000
+
+                # === TIME BLOCK ===
                 world.othello.timers[world.othello.currentPlayer] -= time_passed_seconds
+                # ===            ===
 
             world.render(screen)
 
