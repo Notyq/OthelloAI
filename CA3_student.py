@@ -243,7 +243,6 @@ class Othello(object):
         self.legal_moves = self.getMoves()
         if len(self.legal_moves) == 0:
             return True
-
         # All positions filled - the game is over
         elif len(self.disks) == 64:
             return True
@@ -482,6 +481,7 @@ def run():
                     ai_thread.start()
 
             # elif world.othello.currentPlayer == HUMAN and world.othello.legal_moves is None:
+            #     world.othello.currentPlayer = 1 - world.othello.currentPlayer
             #     ai_thread = AIThread(world, world.othello)
             #     ai_thread.start()
 
