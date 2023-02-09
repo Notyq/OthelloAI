@@ -241,7 +241,7 @@ class Othello(object):
 
         # No legal moves, game ends
         self.legal_moves = self.getMoves()
-        if self.legal_moves is None:
+        if len(self.legal_moves) == 0:
             return True
 
         # All positions filled - the game is over
