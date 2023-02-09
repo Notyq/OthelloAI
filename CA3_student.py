@@ -243,11 +243,12 @@ class Othello(object):
         self.legal_moves = self.getMoves()
         if self.legal_moves is None:
             return True
+
         # All positions filled - the game is over
         elif len(self.disks) == 64:
             return True
-
-        elif self.world.othello.timers[self.world.othello.currentPlayer] <= 170:
+        # Time runs out
+        elif self.world.othello.timers[self.world.othello.currentPlayer] <= 0:
             return True
 
         else:
@@ -354,7 +355,29 @@ def getCoordinates(position):
 
 
 def evaluate(board, player):
-    return random()
+    # --- Evaluate Code ---
+    eval = 0
+    AIDisks = 0
+    HumanDisks = 0
+
+    if board.gameOver():
+        # current player lost
+        if board.currentPlayer == player:
+            eval = -10000 + len(board.disks)
+
+        # current player won
+        else:
+            eval = 10000 - len(board.disks)
+
+    for disk in board.disks:
+        if board.disks.get(disk) == player:
+            AIDisks += 1
+        else:
+            HumanDisks += 1
+
+    eval += AIDisks - HumanDisks
+
+    return eval
 
 
 def alphabeta(board, player, maxDepth, currentDepth, alpha, beta):
@@ -452,6 +475,13 @@ def run():
                     ai_thread = AIThread(world, world.othello)
                     ai_thread.start()
 
+            # elif world.othello.currentPlayer == HUMAN and world.othello.legal_moves is None:
+            #     ai_thread = AIThread(world, world.othello)
+            #     ai_thread.start()
+
+            # elif world.othello.currentPlayer != HUMAN and world.othello.legal_moves is None:
+            #     world.othello.currentPlayer = 1 - world.othello.currentPlayer
+
             time_passed = clock.tick(30)
 
             if world.othello.started and not world.othello.gameOver():
@@ -485,10 +515,10 @@ def run():
             screen.blit(msg, (SCREEN_WIDTH/2 - w/2, SCREEN_HEIGHT - 80))
 
         if world.othello.gameOver():
-            if world.othello.timers[WHITE] <= 170.:
+            if world.othello.timers[WHITE] <= 0.:
                 win_msg = world.othello.playerfont.render(
                     "BLACK WINS ON TIME! ", True, (0, 0, 0))
-            elif world.othello.timers[BLACK] <= 170.:
+            elif world.othello.timers[BLACK] <= 0.:
                 win_msg = world.othello.playerfont.render(
                     "WHITE WINS ON TIME! ", True, (255, 255, 255))
             elif world.othello.scores[BLACK] > world.othello.scores[WHITE]:
