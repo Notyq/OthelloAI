@@ -359,6 +359,8 @@ def evaluate(board, player):
     eval = 0
     AIDisks = 0
     HumanDisks = 0
+    AICorner = 0
+    HumanCorner = 0
 
     if board.gameOver():
         # current player lost
@@ -372,10 +374,14 @@ def evaluate(board, player):
     for disk in board.disks:
         if board.disks.get(disk) == player:
             AIDisks += 1
+            if disk == (1, 1) or disk == (1, 8) or disk == (8, 8) or disk == (8, 1):
+                AICorner += 1
         else:
             HumanDisks += 1
+            if disk == (1, 1) or disk == (1, 8) or disk == (8, 8) or disk == (8, 1):
+                HumanCorner += 1
 
-    eval += AIDisks - HumanDisks
+    eval += (AIDisks+AICorner*3) - (HumanDisks+HumanCorner*3)
 
     return eval
 
