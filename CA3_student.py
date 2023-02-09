@@ -241,16 +241,18 @@ class Othello(object):
 
         # No legal moves, game ends
         self.legal_moves = self.getMoves()
-        print(self.legal_moves)
         if self.legal_moves is None:
             return True
-
         # All positions filled - the game is over
-        if len(self.disks) == 64:
+        elif len(self.disks) == 64:
             return True
 
+        elif self.world.othello.timers[self.world.othello.currentPlayer] <= 170:
+            return True
+
+        else:
+            return False
         # ===           ===
-        return False
 
 
 class World(object):
@@ -454,7 +456,6 @@ def run():
 
             if world.othello.started and not world.othello.gameOver():
                 time_passed_seconds = time_passed / 1000
-
                 # === TIME BLOCK ===
                 world.othello.timers[world.othello.currentPlayer] -= time_passed_seconds
                 # ===            ===
@@ -484,10 +485,10 @@ def run():
             screen.blit(msg, (SCREEN_WIDTH/2 - w/2, SCREEN_HEIGHT - 80))
 
         if world.othello.gameOver():
-            if world.othello.timers[WHITE] <= 0.:
+            if world.othello.timers[WHITE] <= 170.:
                 win_msg = world.othello.playerfont.render(
                     "BLACK WINS ON TIME! ", True, (0, 0, 0))
-            elif world.othello.timers[BLACK] <= 0.:
+            elif world.othello.timers[BLACK] <= 170.:
                 win_msg = world.othello.playerfont.render(
                     "WHITE WINS ON TIME! ", True, (255, 255, 255))
             elif world.othello.scores[BLACK] > world.othello.scores[WHITE]:
