@@ -46,11 +46,14 @@ class Othello(object):
         self.black_disk_image = pygame.image.load(
             "black_disk.png").convert_alpha()
         self.black_w, self.black_h = self.black_disk_image.get_size()
+
         self.white_disk_image = pygame.image.load(
             "white_disk.png").convert_alpha()
         self.white_w, self.white_h = self.white_disk_image.get_size()
+
         self.cursor_image = pygame.image.load(
             "cursor_disk.png").convert_alpha()
+        self.cursor_w, self.cursor_h = self.cursor_image.get_size()
 
         self.legal_moves = self.getMoves()
 
@@ -78,6 +81,13 @@ class Othello(object):
             elif disk[1] == WHITE:
                 surface.blit(self.white_disk_image, Vector2(getPosition(
                     disk[0]) - Vector2(self.white_w/2, self.white_h/2)))
+
+        # --- Q1 START ---
+        self.legal_moves = self.getMoves()
+        for disks in self.legal_moves:
+            surface.blit(self.cursor_image, Vector2(getPosition(
+                disks) - Vector2(self.cursor_w/2, self.cursor_h/2)))
+        # --- Q1 END ---
 
         # Render the labels
         side_margin = LEFT_BORDER + TILE_SIZE/2
@@ -237,7 +247,7 @@ class Othello(object):
 
     def gameOver(self):
 
-        # === GAME OVER ===
+        # === Q3 START ===
 
         # No legal moves, game ends
         self.legal_moves = self.getMoves()
@@ -252,7 +262,7 @@ class Othello(object):
 
         else:
             return False
-        # ===           ===
+        # === Q3 END ===
 
 
 class World(object):
@@ -354,7 +364,7 @@ def getCoordinates(position):
 
 
 def evaluate(board, player):
-    # --- Evaluate Code ---
+    # --- Q4 START ---
     eval = 0
     AIDisks = 0
     HumanDisks = 0
@@ -383,6 +393,8 @@ def evaluate(board, player):
     eval += (AIDisks+AICorner*3) - (HumanDisks+HumanCorner*3)
 
     return eval
+
+    # --- Q4 END ---
 
 
 def alphabeta(board, player, maxDepth, currentDepth, alpha, beta):
@@ -480,21 +492,13 @@ def run():
                     ai_thread = AIThread(world, world.othello)
                     ai_thread.start()
 
-            # elif world.othello.currentPlayer == HUMAN and world.othello.legal_moves is None:
-            #     world.othello.currentPlayer = 1 - world.othello.currentPlayer
-            #     ai_thread = AIThread(world, world.othello)
-            #     ai_thread.start()
-
-            # elif world.othello.currentPlayer != HUMAN and world.othello.legal_moves is None:
-            #     world.othello.currentPlayer = 1 - world.othello.currentPlayer
-
             time_passed = clock.tick(30)
 
             if world.othello.started and not world.othello.gameOver():
                 time_passed_seconds = time_passed / 1000
-                # === TIME BLOCK ===
+                # === Q2 START ===
                 world.othello.timers[world.othello.currentPlayer] -= time_passed_seconds
-                # ===            ===
+                # === Q2 END ===
 
             world.render(screen)
 
