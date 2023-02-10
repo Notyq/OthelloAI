@@ -46,14 +46,11 @@ class Othello(object):
         self.black_disk_image = pygame.image.load(
             "black_disk.png").convert_alpha()
         self.black_w, self.black_h = self.black_disk_image.get_size()
-
         self.white_disk_image = pygame.image.load(
             "white_disk.png").convert_alpha()
         self.white_w, self.white_h = self.white_disk_image.get_size()
-
         self.cursor_image = pygame.image.load(
             "cursor_disk.png").convert_alpha()
-        self.cursor_w, self.cursor_h = self.cursor_image.get_size()
 
         self.legal_moves = self.getMoves()
 
@@ -247,7 +244,7 @@ class Othello(object):
 
     def gameOver(self):
 
-        # === Q3 START ===
+        # === GAME OVER ===
 
         # No legal moves, game ends
         self.legal_moves = self.getMoves()
@@ -262,7 +259,7 @@ class Othello(object):
 
         else:
             return False
-        # === Q3 END ===
+        # ===           ===
 
 
 class World(object):
@@ -364,14 +361,14 @@ def getCoordinates(position):
 
 
 def evaluate(board, player):
-    # === Q4 START -===
+    # --- Q4 START ---
     eval = 0
     aiD = 0
     hD = 0
     aiC = 0
     hC = 0
 
-    if board.gameOver():
+   if board.gameOver():
         # current player lost
         if board.currentPlayer == player:
             eval = -10000 + len(board.disks)
@@ -394,7 +391,7 @@ def evaluate(board, player):
 
     return eval
 
-    # === Q4 END ===
+    # --- Q4 END ---
 
 
 def alphabeta(board, player, maxDepth, currentDepth, alpha, beta):
@@ -492,13 +489,21 @@ def run():
                     ai_thread = AIThread(world, world.othello)
                     ai_thread.start()
 
+            # elif world.othello.currentPlayer == HUMAN and world.othello.legal_moves is None:
+            #     world.othello.currentPlayer = 1 - world.othello.currentPlayer
+            #     ai_thread = AIThread(world, world.othello)
+            #     ai_thread.start()
+
+            # elif world.othello.currentPlayer != HUMAN and world.othello.legal_moves is None:
+            #     world.othello.currentPlayer = 1 - world.othello.currentPlayer
+
             time_passed = clock.tick(30)
 
             if world.othello.started and not world.othello.gameOver():
                 time_passed_seconds = time_passed / 1000
-                # === Q2 START ===
+                # === TIME BLOCK ===
                 world.othello.timers[world.othello.currentPlayer] -= time_passed_seconds
-                # === Q2 END ===
+                # ===            ===
 
             world.render(screen)
 
