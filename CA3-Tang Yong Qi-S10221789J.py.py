@@ -82,12 +82,12 @@ class Othello(object):
                 surface.blit(self.white_disk_image, Vector2(getPosition(
                     disk[0]) - Vector2(self.white_w/2, self.white_h/2)))
 
-        # === Q1 START ===
+        # --- Q1 START ---
         self.legal_moves = self.getMoves()
         for disks in self.legal_moves:
             surface.blit(self.cursor_image, Vector2(getPosition(
                 disks) - Vector2(self.cursor_w/2, self.cursor_h/2)))
-        # === Q1 END ===
+        # --- Q1 END ---
 
         # Render the labels
         side_margin = LEFT_BORDER + TILE_SIZE/2
@@ -257,7 +257,7 @@ class Othello(object):
         elif len(self.disks) == 64:
             return True
         # Time runs out
-        elif self.world.othello.timers[self.world.othello.currentPlayer] <= 175:
+        elif self.world.othello.timers[self.world.othello.currentPlayer] <= 0:
             return True
 
         else:
@@ -364,12 +364,12 @@ def getCoordinates(position):
 
 
 def evaluate(board, player):
-    # === Q4 START -===
+    # --- Q4 START ---
     eval = 0
-    aiD = 0
-    hD = 0
-    aiC = 0
-    hC = 0
+    AIDisks = 0
+    HumanDisks = 0
+    AICorner = 0
+    HumanCorner = 0
 
     if board.gameOver():
         # current player lost
@@ -382,19 +382,19 @@ def evaluate(board, player):
 
     for disk in board.disks:
         if board.disks.get(disk) == player:
-            aiD += 1
+            AIDisks += 1
             if disk == (1, 1) or disk == (1, 8) or disk == (8, 8) or disk == (8, 1):
-                aiC += 1
+                AICorner += 1
         else:
-            hD += 1
+            HumanDisks += 1
             if disk == (1, 1) or disk == (1, 8) or disk == (8, 8) or disk == (8, 1):
-                hC += 1
+                HumanCorner += 1
 
-    eval += (aiD+aiC*3) - (hD+hC*3)
+    eval += (AIDisks+AICorner*3) - (HumanDisks+HumanCorner*3)
 
     return eval
 
-    # === Q4 END ===
+    # --- Q4 END ---
 
 
 def alphabeta(board, player, maxDepth, currentDepth, alpha, beta):
@@ -525,10 +525,10 @@ def run():
             screen.blit(msg, (SCREEN_WIDTH/2 - w/2, SCREEN_HEIGHT - 80))
 
         if world.othello.gameOver():
-            if world.othello.timers[WHITE] <= 175.:
+            if world.othello.timers[WHITE] <= 0.:
                 win_msg = world.othello.playerfont.render(
                     "BLACK WINS ON TIME! ", True, (0, 0, 0))
-            elif world.othello.timers[BLACK] <= 175.:
+            elif world.othello.timers[BLACK] <= 0.:
                 win_msg = world.othello.playerfont.render(
                     "WHITE WINS ON TIME! ", True, (255, 255, 255))
             elif world.othello.scores[BLACK] > world.othello.scores[WHITE]:
